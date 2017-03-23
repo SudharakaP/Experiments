@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <script>
+
+        var colors;
+        var guess;
+        var answer;
+        var count = 0;
+        var finished = false;
+
+        function do_game() {
+            colors = ["blue", "cyan", "gold", "grey", "green", "magenta", "orange", "red", "white", "yellow"];
+
+            guess = colors[Math.floor(Math.random() * colors.length)];
+
+            while (!finished) {
+                answer = prompt("I am thinking of one of these colors:" + "\n\n" + colors.join(", ") + "\n\n" + "What color am I thinking of?");
+
+                count++;
+                finished = check_guess(answer);
+            }
+        }
+
+        function check_guess(ans) {
+
+            // handling the case where user presses the "cancel"
+            if (ans == null)
+                return true;
+
+            if (ans == guess)
+                return true;
+            else
+                return false;
+        }
+
+    </script>
+</head>
+</html>
+<body onload=do_game()>
+</body>
+</html>

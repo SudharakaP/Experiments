@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:h="http://java.sun.com/jsf/html">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
+<title>Login</title>
+</head>
+<body>
+	<h:form>
+	Name:
+		<h:inputText id="text1" value="#{nameWrapper.name}" />
+		<br />
+		Address:
+		<h:inputText id="text2" value="#{nameWrapper.address}" />
+		<br />
+		Zip:
+		<h:inputText id="text3" value="#{nameWrapper.zip}"/> <br />
+		<h:commandButton id="submit" value="Submit" action="PageTwo" />
+	</h:form>
+</body>
+</html>
