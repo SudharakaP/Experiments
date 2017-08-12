@@ -70,4 +70,29 @@ angular.module('confusionApp')
     .controller('DishDetailController', ['$scope', '$stateParams', 'menuFactory', function($scope, $stateParams, menuFactory) {
         var dish= menuFactory.getDish(parseInt($stateParams.id,10));
         $scope.dish = dish;
-    }]);
+    }])
+    
+    .controller('DishCommentController', function($scope){            
+        //Step 1: Create a JavaScript object to hold the comment from the form
+        var comment = { author: "", rating: "", comment: "", date: "" };
+
+        $scope.feedback = { fullName: "", numStars: "5", comment: "" };
+
+        $scope.submitComment = function () {
+
+            //Step 2: This is how you record the date
+            comment.date = new Date().toISOString();                   
+            comment.author = $scope.feedback.fullName;
+            comment.rating = $scope.feedback.numStars;
+            comment.comment = $scope.feedback.comment;
+
+            // Step 3: Push your comment into the dish's comment array
+            $scope.dish.comments.push(comment);
+
+            //Step 4: reset your form to pristine
+            $scope.commentForm.$setPristine();
+
+            //Step 5: reset your JavaScript object that holds your comment
+            comment = {};
+        };
+    });
