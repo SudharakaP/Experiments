@@ -10,6 +10,7 @@ angular.module('confusionApp')
 
         $scope.dishes= menuFactory.getDishes();
 
+
         $scope.select = function(setTab) {
             $scope.tab = setTab;
 
@@ -68,31 +69,44 @@ angular.module('confusionApp')
     }])
 
     .controller('DishDetailController', ['$scope', '$stateParams', 'menuFactory', function($scope, $stateParams, menuFactory) {
-        var dish= menuFactory.getDish(parseInt($stateParams.id,10));
-        $scope.dish = dish;
-    }])
-    
-    .controller('DishCommentController', function($scope){            
-        //Step 1: Create a JavaScript object to hold the comment from the form
-        var comment = { author: "", rating: "", comment: "", date: "" };
 
-        $scope.feedback = { fullName: "", numStars: "5", comment: "" };
+        var dishDetail = menuFactory.getDish(parseInt($stateParams.id,10));
+
+        $scope.dishDetail = dishDetail;
+
+    }])
+
+    .controller('DishCommentController', ['$scope', function($scope) {
+        $scope.mycomment = {rating:"5", comment:"", author:"", date:""};
 
         $scope.submitComment = function () {
+            $scope.mycomment.date = new Date().toISOString();
+            $scope.mycomment.rating = parseInt($scope.mycomment.rating);
+            console.log($scope.mycomment);
 
-            //Step 2: This is how you record the date
-            comment.date = new Date().toISOString();                   
-            comment.author = $scope.feedback.fullName;
-            comment.rating = $scope.feedback.numStars;
-            comment.comment = $scope.feedback.comment;
+            $scope.dishDetail.comments.push($scope.mycomment);
 
-            // Step 3: Push your comment into the dish's comment array
-            $scope.dish.comments.push(comment);
-
-            //Step 4: reset your form to pristine
             $scope.commentForm.$setPristine();
 
-            //Step 5: reset your JavaScript object that holds your comment
-            comment = {};
+            $scope.mycomment = {rating:"5", comment:"", author:"", date:""};
         };
-    });
+    }])
+
+    // implement the IndexController and About Controller here
+    .controller('IndexController', ['$scope', '$stateParams', 'menuFactory', 'corporateFactory', function($scope, $stateParams, menuFactory, corporateFactory) {
+        var dish = menuFactory.getDish(0);
+        $scope.dish = dish;
+        
+        var promotion = menuFactory.getPromotion(0);
+        $scope.promotion = promotion;
+        
+        var executiveChef = corporateFactory.getLeader(3);
+        $scope.executiveChef = executiveChef;
+    }])
+
+    .controller('AboutController', ['$scope', '$stateParams', 'corporateFactory', function($scope, $stateParams, corporateFactory) {
+        var leaders = corporateFactory.getLeaders(0);
+        $scope.leaders = leaders;
+    }])
+
+;
