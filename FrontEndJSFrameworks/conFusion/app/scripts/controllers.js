@@ -7,9 +7,10 @@ angular.module('confusionApp')
         $scope.tab = 1;
         $scope.filtText = '';
         $scope.showDetails = false;
+        $scope.showMenu = true;
+        $scope.message = "Loading ...";
 
-        $scope.dishes= menuFactory.getDishes();
-
+        $scope.dishes = menuFactory.getDishes().query();
 
         $scope.select = function(setTab) {
             $scope.tab = setTab;
@@ -69,10 +70,9 @@ angular.module('confusionApp')
     }])
 
     .controller('DishDetailController', ['$scope', '$stateParams', 'menuFactory', function($scope, $stateParams, menuFactory) {
-
-        var dishDetail = menuFactory.getDish(parseInt($stateParams.id,10));
-
-        $scope.dishDetail = dishDetail;
+        $scope.showDish = true;
+        $scope.message = "Loading ...";
+        $scope.dishDetail = menuFactory.getDishes().get({id:parseInt($stateParams.id,10)});
 
     }])
 
@@ -92,14 +92,17 @@ angular.module('confusionApp')
         };
     }])
 
-    // implement the IndexController and About Controller here
+// implement the IndexController and About Controller here
     .controller('IndexController', ['$scope', '$stateParams', 'menuFactory', 'corporateFactory', function($scope, $stateParams, menuFactory, corporateFactory) {
-        var dish = menuFactory.getDish(0);
-        $scope.dish = dish;
-        
+        $scope.dish = {};
+        $scope.showDish = true;
+        $scope.message="Loading ...";
+
+        $scope.dish = menuFactory.getDishes().get({id:0});
+
         var promotion = menuFactory.getPromotion(0);
         $scope.promotion = promotion;
-        
+
         var executiveChef = corporateFactory.getLeader(3);
         $scope.executiveChef = executiveChef;
     }])
