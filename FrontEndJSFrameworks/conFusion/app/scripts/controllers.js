@@ -109,10 +109,11 @@ angular.module('confusionApp')
         };
     }])
 
-// implement the IndexController and About Controller here
+    // implement the IndexController and About Controller here
     .controller('IndexController', ['$scope', '$stateParams', 'menuFactory', 'corporateFactory', function($scope, $stateParams, menuFactory, corporateFactory) {
         $scope.showDish = false;
         $scope.showPromotion = false;
+        $scope.showExecutiveChef = false;
         $scope.message="Loading ...";
 
         menuFactory.getDishes().get({id:0}).$promise.then(
@@ -134,14 +135,30 @@ angular.module('confusionApp')
                 $scope.message = "Error: " + response.status + " " + response.statusTest;
             }
         );
-
-        var executiveChef = corporateFactory.getLeader(3);
-        $scope.executiveChef = executiveChef;
+        
+        corporateFactory.getLeaders().get({id:3}).$promise.then(
+            function(response){
+                $scope.executiveChef = response;
+                $scope.showExecutiveChef = true;
+            },
+            function(response){
+                $scope.message = "Error: " + response.status + " " + response.statusTest;
+            }
+        );
     }])
 
     .controller('AboutController', ['$scope', '$stateParams', 'corporateFactory', function($scope, $stateParams, corporateFactory) {
-        var leaders = corporateFactory.getLeaders(0);
-        $scope.leaders = leaders;
+        $scope.showLeaders = false;
+        $scope.message = "Loading ...";
+        corporateFactory.getLeaders().query(
+            function (response){
+                $scope.leaders = response;
+                $scope.showLeaders = true;
+            }, 
+            function (response){
+                $scope.message = "Error: " + response.status + " " + response.statusText;
+            }
+        );
     }])
 
 ;
