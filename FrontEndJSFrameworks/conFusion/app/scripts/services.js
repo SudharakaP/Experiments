@@ -26,8 +26,19 @@ angular.module('confusionApp')
         }
 
         var corpfac = {
-            getLeaders: getLeaders,
+            getLeaders: getLeaders
         };
 
         return corpfac;
+    }])
+
+    .factory('feedbackFactory', ['$resource', 'baseURL', function($resource, baseURL) {       
+        function postFeedback(){
+            return $resource(baseURL + "feedback", null, {'update': {method: 'PUT'}});
+        }
+        
+        var feedbackFac = {
+            postFeedback: postFeedback
+        };
+        return feedbackFac;
     }]);
