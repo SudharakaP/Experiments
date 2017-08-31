@@ -68,7 +68,7 @@ angular.module('confusionApp')
                 console.log('incorrect');
             }
             else {
-                $scope.invalidChannelSelection = false;;
+                $scope.invalidChannelSelection = false;
                 feedbackFactory.postFeedback().save($scope.feedback);
                 $scope.feedbackForm.$setPristine();
                 $scope.feedback = {mychannel:"", firstName:"", lastName:"", agree:false, email:"" };
@@ -159,6 +159,4 @@ angular.module('confusionApp')
                 $scope.message = "Error: " + response.status + " " + response.statusText;
             }
         );
-    }])
-
-;
+    }]);
