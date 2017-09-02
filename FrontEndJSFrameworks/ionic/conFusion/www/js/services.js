@@ -36,9 +36,24 @@ angular.module('conFusion.services', ['ionic', 'ngResource'])
         function postFeedback(){
             return $resource(baseURL + "feedback", null, {'update': {method: 'PUT'}});
         }
-        
+
         var feedbackFac = {
             postFeedback: postFeedback
         };
         return feedbackFac;
+    }])
+
+    .factory('favoriteFactory', ['$resource', 'baseURL', function ($resource, baseURL) {
+        var favFac = {};
+        var favorites = [];
+
+        favFac.addToFavorites = function (index) {
+            for (var i = 0; i < favorites.length; i++) {
+                if (favorites[i].id == index)
+                    return;
+            }
+            favorites.push({id: index});
+        };
+
+        return favFac;
     }]);
