@@ -54,7 +54,8 @@ angular.module('conFusion', ['ionic', 'conFusion.controllers', 'conFusion.servic
       url: '/contactus',
       views: {
         'mainContent': {
-          templateUrl: 'templates/contactus.html'
+          templateUrl: 'templates/contactus.html',
+          controller: 'ContactController'
         }
       }
     })
