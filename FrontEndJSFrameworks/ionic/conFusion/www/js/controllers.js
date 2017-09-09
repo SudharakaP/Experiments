@@ -151,7 +151,7 @@ angular.module('conFusion.controllers', [])
         };
     }])
 
-    .controller('DishDetailController', ['$scope', '$stateParams', 'menuFactory', 'baseURL', function($scope, $stateParams, menuFactory, baseURL) {
+    .controller('DishDetailController', ['$scope', '$stateParams', 'menuFactory', 'baseURL', '$ionicPopover', 'favoriteFactory',  '$ionicModal', function($scope, $stateParams, menuFactory, baseURL, $ionicPopover, favoriteFactory, $ionicModal) {
         $scope.baseURL = baseURL;
         $scope.showDish = false;
         $scope.message = "Loading ...";
@@ -164,6 +164,56 @@ angular.module('conFusion.controllers', [])
                 $scope.message = "Error: " + response.status + " " + response.statusText;
             }
         );
+
+        // .fromTemplateUrl() method
+        $ionicPopover.fromTemplateUrl('templates/dish-detail-popover.html', {
+            scope: $scope
+        }).then(function(popover) {
+            $scope.popover = popover;
+        });
+
+        $scope.openPopover = function($event) {
+            $scope.popover.show($event);
+        };
+
+        $scope.closePopover = function(){
+            $scope.popover.hide();
+        };
+
+        $scope.addToFavorites = function(){
+            favoriteFactory.addToFavorites($scope.dishDetail.id);
+            $scope.closePopover();
+        };
+
+        $ionicModal.fromTemplateUrl('templates/dish-comment.html', {
+            scope: $scope,
+            animation: 'slide-in-up'
+        }).then(function(modal) {
+            $scope.modal = modal;
+        });
+        
+        $scope.openCommentModal = function() {
+            $scope.modal.show();
+        };
+        $scope.closeCommentModal = function() {
+            $scope.modal.hide();
+        };
+        
+        $scope.myComment = {rating:"5", comment:"", author:"", date:""};
+        
+        $scope.submitComment = function () {
+            $scope.myComment.date = new Date().toISOString();
+            $scope.myComment.rating = parseInt($scope.myComment.rating);
+            console.log($scope.myComment);
+
+            $scope.dishDetail.comments.push($scope.myComment);
+
+            menuFactory.getDishes().update({id:$scope.dishDetail.id}, $scope.dishDetail);
+
+            $scope.myComment = {rating:"5", comment:"", author:"", date:""};
+            $scope.closeCommentModal();
+            $scope.closePopover();
+        };
     }])
 
     .controller('DishCommentController', ['$scope', 'menuFactory', function($scope, menuFactory) {
