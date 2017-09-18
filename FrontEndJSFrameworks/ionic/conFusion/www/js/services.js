@@ -8,23 +8,10 @@ angular.module('conFusion.services', ['ionic', 'ngResource'])
 
     .factory('promotionFactory', ['$resource', 'baseURL', function($resource, baseURL){
         return $resource(baseURL+"promotions/:id", null, {'update':{method:'PUT'}});
-
     }])
 
     .factory('corporateFactory', ['$resource', 'baseURL', function($resource, baseURL) {   
-
-        // Implement two functions, one named getLeaders,
-        // the other named getLeader(index)
-        // Remember this is a factory not a service
-        function getLeaders() {
-            return $resource(baseURL + "leadership/:id", null, {'update':{method:'PUT'}});
-        }
-
-        var corpfac = {
-            getLeaders: getLeaders
-        };
-
-        return corpfac;
+        return $resource(baseURL + "leadership/:id", null, {'update':{method:'PUT'}});
     }])
 
     .factory('feedbackFactory', ['$resource', 'baseURL', function($resource, baseURL) {       

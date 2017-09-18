@@ -24,7 +24,7 @@ angular.module('conFusion', ['ionic', 'conFusion.controllers', 'conFusion.servic
     $rootScope.$on('loading:show', function () {
         $ionicLoading.show({
             template: '<ion-spinner></ion-spinner> Loading ...'
-        })
+        });
     });
 
     $rootScope.$on('loading:hide', function () {
@@ -57,7 +57,18 @@ angular.module('conFusion', ['ionic', 'conFusion.controllers', 'conFusion.servic
         views: {
             'mainContent': {
                 templateUrl: 'templates/home.html',
-                controller: 'IndexController'
+                controller: 'IndexController',
+                resolve: {
+                    dish: ['$stateParams', 'menuFactory', function($stateParams, menuFactory){
+                        return menuFactory.get({id:0});
+                    }],
+                    promotion: ['$stateParams', 'promotionFactory', function($stateParams, promotionFactory) {
+                        return promotionFactory.get({id:0});
+                    }],
+                    executiveChef: ['$stateParams', 'corporateFactory', function($stateParams, corporateFactory) {
+                        return corporateFactory.get({id:3});
+                    }]
+                }
             }
         }
     })
@@ -67,7 +78,12 @@ angular.module('conFusion', ['ionic', 'conFusion.controllers', 'conFusion.servic
         views: {
             'mainContent': {
                 templateUrl: 'templates/aboutus.html',
-                controller: 'AboutController'
+                controller: 'AboutController',
+                resolve: {
+                    leaders: ['corporateFactory', function(corporateFactory){
+                        return corporateFactory.query();
+                    }]
+                }
             }
         }
     })
@@ -103,7 +119,12 @@ angular.module('conFusion', ['ionic', 'conFusion.controllers', 'conFusion.servic
         views: {
             'mainContent': {
                 templateUrl: 'templates/menu.html',
-                controller: 'MenuController'
+                controller: 'MenuController',
+                resolve: {
+                    dishes: ['menuFactory', function(menuFactory){
+                        return menuFactory.query();
+                    }]
+                }
             }
         }
     })

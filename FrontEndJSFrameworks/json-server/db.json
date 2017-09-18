@@ -38,6 +38,24 @@
           "comment": "It's your birthday, we're gonna party!",
           "author": "25 Cent",
           "date": "2011-12-02T17:57:28.556094Z"
+        },
+        {
+          "rating": 5,
+          "comment": "It is not bad",
+          "author": "Hugo",
+          "date": "2017-09-11T04:13:12.072Z"
+        },
+        {
+          "rating": 5,
+          "comment": "It is really bad",
+          "author": "Negative Guy",
+          "date": "2017-09-11T04:13:40.928Z"
+        },
+        {
+          "rating": 5,
+          "comment": "Test",
+          "author": "Test",
+          "date": "2017-09-11T04:13:57.244Z"
         }
       ]
     },
@@ -144,6 +162,12 @@
           "comment": "It's your birthday, we're gonna party!",
           "author": "25 Cent",
           "date": "2011-12-02T17:57:28.556094Z"
+        },
+        {
+          "rating": 5,
+          "comment": "My first android app.",
+          "author": "Sudharaka",
+          "date": "2017-09-11T03:44:01.517Z"
         }
       ]
     },
