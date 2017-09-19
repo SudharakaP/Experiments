@@ -9,7 +9,7 @@ angular.module('conFusion.controllers', [])
     //$scope.$on('$ionicView.enter', function(e) {
     //});
 
-    // Form data for the login modal
+    // Form data for the login modal and favorites
     $scope.loginData = $localStorage.getObject('userInfo', '{}');
     $scope.reservation = {};
 
@@ -109,6 +109,7 @@ angular.module('conFusion.controllers', [])
         $scope.addFavorite = function (index) {
             console.log("index is " + index);
             favoriteFactory.addToFavorites(index);
+            console.log('Adding Favorite Data', favoriteFactory.getFavorites());
             $ionicListDelegate.closeOptionButtons();
         };
     }])
@@ -166,7 +167,7 @@ angular.module('conFusion.controllers', [])
         };
 
         $scope.addToFavorites = function(){
-            favoriteFactory.addToFavorites($scope.dishDetail.id);
+            favoriteFactory.addToFavorites($scope.dishDetail.id);         
             $scope.closePopover();
         };
 
@@ -237,9 +238,7 @@ angular.module('conFusion.controllers', [])
 
         $scope.baseURL = baseURL;
         $scope.shouldShowDelete = false;
-
         $scope.favorites = favorites;
-
         $scope.dishes = dishes;
         console.log($scope.dishes, $scope.favorites);
 
