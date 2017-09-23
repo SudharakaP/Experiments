@@ -6,7 +6,7 @@
 // 'conFusion.controllers' is found in controllers.js
 angular.module('conFusion', ['ionic', 'ngCordova', 'conFusion.controllers', 'conFusion.services'])
 
-    .run(function($ionicPlatform, $rootScope, $ionicLoading, $cordovaSplashScreen, $timeout) {
+    .run(function($ionicPlatform, $rootScope, $ionicLoading, $cordovaSplashscreen, $timeout) {
     $ionicPlatform.ready(function() {
         // Hide the accessory bar by default (remove this to show the accessory bar above the keyboard
         // for form inputs)
