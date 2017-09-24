@@ -119,6 +119,21 @@ angular.module('conFusion.controllers', [])
             $scope.registerform.show();
 
         };
+
+        $scope.takePictureFromGallery = function() {
+            window.imagePicker.getPictures(
+                function(results) {
+                    $scope.registration.imgSrc = results[0];
+                }, function (error) {
+                    console.log('Error: ' + error);
+                }, {
+                    maximumImagesCount: 1,
+                    width: 100,
+                    height: 100,
+                    quality: 50
+                }
+            );
+        };
     });
 })
 
@@ -175,12 +190,10 @@ angular.module('conFusion.controllers', [])
                     console.log('Failed to add Notification ');
                 });
 
-                $cordovaToast
-                    .show('Added Favorite '+$scope.dishes[index].name, 'long', 'center')
-                    .then(function (success) {
-                    // success
+                $cordovaToast.show('Added Favorite '+$scope.dishes[index].name, 'long', 'center').then(function (success) {
+                    console.log('Added Toast');
                 }, function (error) {
-                    // error
+                    console.log('Failed to add Toast');
                 });
             });
         };
@@ -217,7 +230,7 @@ angular.module('conFusion.controllers', [])
         };
     }])
 
-    .controller('DishDetailController', ['$scope', '$stateParams', 'dish', 'menuFactory', 'baseURL', '$ionicPopover', 'favoriteFactory',  '$ionicModal', function($scope, $stateParams, dish, menuFactory, baseURL, $ionicPopover, favoriteFactory, $ionicModal) {
+    .controller('DishDetailController', ['$scope', '$stateParams', 'dish', 'menuFactory', 'baseURL', '$ionicPopover', 'favoriteFactory',  '$ionicModal', '$ionicPlatform', '$cordovaLocalNotification', '$cordovaToast', function($scope, $stateParams, dish, menuFactory, baseURL, $ionicPopover, favoriteFactory, $ionicModal, $ionicPlatform, $cordovaLocalNotification, $cordovaToast) {
         $scope.baseURL = baseURL;
         $scope.showDish = false;
         $scope.message = "Loading ...";
@@ -241,6 +254,24 @@ angular.module('conFusion.controllers', [])
         $scope.addToFavorites = function(){
             favoriteFactory.addToFavorites($scope.dishDetail.id);         
             $scope.closePopover();
+
+            $ionicPlatform.ready(function(){
+                $cordovaLocalNotification.schedule({
+                    id: 1,
+                    title: "Added Favorite",
+                    text: $scope.dishDetail.name
+                }).then(function () {
+                    console.log('Added Favorite '+$scope.dishDetail.name);
+                },function () {
+                    console.log('Failed to add Notification');
+                });
+
+                $cordovaToast.show('Added Favorite '+$scope.dishDetail.name, 'long', 'center').then(function (success) {
+                    console.log('Added Toast');
+                }, function (error) {
+                    console.log('Failed to add Toast');
+                });
+            });
         };
 
         $ionicModal.fromTemplateUrl('templates/dish-comment.html', {
@@ -329,6 +360,7 @@ angular.module('conFusion.controllers', [])
                 if (res) {
                     console.log('Ok to delete');
                     favoriteFactory.deleteFromFavorites(index);
+                    navigator.vibrate(time);
                 }  else {
                     console.log('Canceled delete');
                 }
