@@ -8,6 +8,17 @@ exports.getToken = function(user){
     });
 };
 
+exports.verifyAdmin = function(req, res, next){
+    var isAdmin = req.decoded.admin;
+    if(isAdmin)
+        next();
+    else{
+        var err = new Error('You are not authorized to perform this operation!');
+        err.status = 403;
+        return next(err);
+    }
+}
+
 exports.verifyOrdinaryUser = function (req, res, next){
     // check header or url parameters  or post parameters for token
     var token = req.body.token || req.query.token || req.headers['x-access-token'];
