@@ -8,6 +8,7 @@ var bodyParser = require('body-parser');
 var index = require('./routes/index');
 var users = require('./routes/users');
 var dishRouter = require('./routes/dishRouter');
+var favoriteRouter = require('./routes/favoritesRouter');
 var leaderRouter = require('./routes/leaderRouter');
 var promoRouter = require('./routes/promoRouter');
 var mongoose = require('mongoose');
@@ -51,6 +52,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.use('/', index);
 app.use('/users', users);
 app.use('/dishes', dishRouter);
+app.use('/favorites', favoriteRouter);
 app.use('/promotions', promoRouter);
 app.use('/leadership', leaderRouter);
 
