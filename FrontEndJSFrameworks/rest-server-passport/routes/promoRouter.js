@@ -7,12 +7,7 @@ promoRouter.use(bodyParser.json());
 
 promoRouter.route('/')
 
-    .all(Verify.verifyOrdinaryUser, function(req, res, next){
-    res.writeHead(200, {'Content-Type' : 'text/plain'}); 
-    next();
-})
-
-    .get(Verify.verifyOrdinaryUser, function(req, res, next){
+    .get(function(req, res, next){
     res.end('Will send all the promotions to you!');
 })
 
@@ -27,12 +22,7 @@ promoRouter.route('/')
 
 promoRouter.route('/:promoId')
 
-    .all(Verify.verifyOrdinaryUser, function(req,res,next) {
-    res.writeHead(200, { 'Content-Type': 'text/plain' });
-    next();
-})
-
-    .get(Verify.verifyOrdinaryUser, function(req,res,next){
+    .get(function(req,res,next){
     res.end('Will send details of the promotion: ' + req.params.promoId +' to you!');
 })
 
