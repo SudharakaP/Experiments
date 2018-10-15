@@ -85,7 +85,7 @@ public final class ReciprocalArraySum {
      * created to perform reciprocal array sum in parallel.
      */
     private static class ReciprocalArraySumTask extends RecursiveAction {
-        static int SEQUENTIAL_THRESHOLD = 5;
+        static int SEQUENTIAL_THRESHOLD = 10000;
         /**
          * Starting index for traversal done by this task.
          */
@@ -133,7 +133,7 @@ public final class ReciprocalArraySum {
                 }
             } else {
                 ReciprocalArraySumTask leftSum = new ReciprocalArraySumTask(startIndexInclusive, (startIndexInclusive + endIndexExclusive) / 2, input);
-                ReciprocalArraySumTask rightSum = new ReciprocalArraySumTask((startIndexInclusive + endIndexExclusive) / 2, startIndexInclusive, input);
+                ReciprocalArraySumTask rightSum = new ReciprocalArraySumTask((startIndexInclusive + endIndexExclusive) / 2, endIndexExclusive, input);
                 leftSum.fork();
                 rightSum.compute();
                 leftSum.join();
