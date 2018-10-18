@@ -44,9 +44,13 @@ public final class StudentAnalytics {
      * @param studentArray Student data for the class.
      * @return Average age of enrolled students
      */
-    public double averageAgeOfEnrolledStudentsParallelStream(
-            final Student[] studentArray) {
-        throw new UnsupportedOperationException();
+    public double averageAgeOfEnrolledStudentsParallelStream(final Student[] studentArray) {
+        return Stream.of(studentArray)
+                .parallel()
+                .filter(s -> s.checkIsCurrent())
+                .mapToDouble(a -> a.getAge())
+                .average()
+                .getAsDouble();
     }
 
     /**
@@ -100,7 +104,18 @@ public final class StudentAnalytics {
      */
     public String mostCommonFirstNameOfInactiveStudentsParallelStream(
             final Student[] studentArray) {
-        throw new UnsupportedOperationException();
+        Map<String, Integer> nameCounts = new HashMap<>();
+        Stream.of(studentArray)
+                .parallel()
+                .filter(s -> !s.checkIsCurrent()).forEach(s -> {
+                    if (nameCounts.containsKey(s.getFirstName())) {
+                        nameCounts.put(s.getFirstName(),
+                                new Integer(nameCounts.get(s.getFirstName()) + 1));
+                    } else {
+                        nameCounts.put(s.getFirstName(), 1);
+                    }
+                });
+        return nameCounts.entrySet().stream().parallel().max(Map.Entry.comparingByValue()).get().getKey();
     }
 
     /**
