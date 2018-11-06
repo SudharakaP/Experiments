@@ -69,11 +69,21 @@ public final class OneDimAveragingPhaser {
                 if (right > n) right = n;
 
                 for (int iter = 0; iter < iterations; iter++) {
-                    for (int j = left; j <= right; j++) {
+
+                    // Compute leftmost and rightmost elements
+                    threadPrivateMyNew[left] = (threadPrivateMyVal[left - 1] + threadPrivateMyVal[left + 1]) / 2.0;
+                    threadPrivateMyNew[right] = (threadPrivateMyVal[right - 1] + threadPrivateMyVal[right + 1]) / 2.0;
+
+                    // Signal arrival on phaser
+                    int  currentPhase = ph.arrive();
+
+                    for (int j = left + 1; j <= right - 1; j++) {
                         threadPrivateMyNew[j] = (threadPrivateMyVal[j - 1]
                             + threadPrivateMyVal[j + 1]) / 2.0;
                     }
-                    ph.arriveAndAwaitAdvance();
+
+                    // Wait for previous phase to complete before advancing
+                    ph.awaitAdvance(currentPhase);
 
                     double[] temp = threadPrivateMyNew;
                     threadPrivateMyNew = threadPrivateMyVal;
