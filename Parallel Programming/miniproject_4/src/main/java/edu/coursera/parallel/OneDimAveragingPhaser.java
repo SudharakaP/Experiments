@@ -134,7 +134,7 @@ public final class OneDimAveragingPhaser {
 
                     int currentPhase = ph.arrive();
 
-                    for (int j = left - 1; j <= right + 1; j++) {
+                    for (int j = left + 1; j <= right - 1; j++) {
                         threadPrivateMyNew[j] = (threadPrivateMyVal[j - 1]
                                 + threadPrivateMyVal[j + 1]) / 2.0;
                     }
