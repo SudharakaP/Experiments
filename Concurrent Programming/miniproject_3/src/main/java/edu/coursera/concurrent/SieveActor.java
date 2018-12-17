@@ -45,7 +45,7 @@ public final class SieveActor extends Sieve {
      * parallel.
      */
     public static final class SieveActorActor extends Actor {
-        private final int MAX_NUMBER_OF_PRIMES = 2000;
+        private final int MAX_NUMBER_OF_PRIMES = 1000;
         private SieveActorActor nextActor;
         private List<Integer> locallyPrimeNumbers = new ArrayList(MAX_NUMBER_OF_PRIMES);
         private int numLocalPrimes;
