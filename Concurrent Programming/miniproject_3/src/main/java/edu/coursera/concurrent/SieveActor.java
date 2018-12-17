@@ -5,7 +5,6 @@ import edu.rice.pcdp.Actor;
 import java.util.ArrayList;
 import java.util.List;
 
-import static edu.rice.pcdp.PCDP.async;
 import static edu.rice.pcdp.PCDP.finish;
 
 /**
@@ -15,8 +14,6 @@ import static edu.rice.pcdp.PCDP.finish;
  * countPrimes to determine the number of primes <= limit.
  */
 public final class SieveActor extends Sieve {
-
-    private static List<Integer> primeNumbers = new ArrayList();
     /**
      * {@inheritDoc}
      *
@@ -27,16 +24,20 @@ public final class SieveActor extends Sieve {
      */
     @Override
     public int countPrimes(final int limit) {
-        primeNumbers.clear();
-        List<Integer> numberList = new ArrayList();
-        for (int i = 2; i <= limit; i++) {
-            numberList.add(i);
-        }
-        SieveActorActor actor = new SieveActorActor();
+        int numberOfPrimes = 0;
+        SieveActorActor actor = new SieveActorActor(2);
         finish(() -> {
-            actor.send(numberList);
+            for (int i = 3; i <= limit; i += 2) {
+                actor.send(i);
+            }
         });
-        return primeNumbers.size();
+
+        SieveActorActor loopActor = actor;
+        while (loopActor != null){
+            numberOfPrimes += loopActor.numLocalPrimes;
+            loopActor = loopActor.nextActor;
+        }
+        return numberOfPrimes;
     }
 
     /**
@@ -44,6 +45,16 @@ public final class SieveActor extends Sieve {
      * parallel.
      */
     public static final class SieveActorActor extends Actor {
+        private final int MAX_NUMBER_OF_PRIMES = 2000;
+        private SieveActorActor nextActor;
+        private List<Integer> locallyPrimeNumbers = new ArrayList(MAX_NUMBER_OF_PRIMES);
+        private int numLocalPrimes;
+
+        SieveActorActor(int localPrime){
+            locallyPrimeNumbers.add(localPrime);
+            this.nextActor = null;
+            numLocalPrimes = 1;
+        }
         /**
          * Process a single message sent to this actor.
          *
@@ -53,18 +64,26 @@ public final class SieveActor extends Sieve {
          */
         @Override
         public void process(final Object msg) {
-             List<Integer> numberList = (ArrayList) msg;
-             if (numberList.size() == 0)
-                 return;
-             int firstNumber = numberList.get(0);
-             primeNumbers.add(firstNumber);
-             for (int i = 0; i < numberList.size(); i++){
-                 if (numberList.get(i) % firstNumber == 0){
-                     numberList.remove(i);
-                 }
-             }
-             SieveActorActor actor = new SieveActorActor();
-             actor.send(numberList);
+            Integer number = (Integer) msg;
+            if (locallyPrime(number)) {
+                if (numLocalPrimes < MAX_NUMBER_OF_PRIMES) {
+                    locallyPrimeNumbers.add(number);
+                    numLocalPrimes++;
+                } else if (nextActor == null) {
+                    nextActor = new SieveActorActor(number);
+                } else {
+                    nextActor.send(number);
+                }
+            }
+        }
+
+        private boolean locallyPrime(int number) {
+            for (Integer locallyPrimeNumber: locallyPrimeNumbers){
+                if (number % locallyPrimeNumber == 0){
+                    return false;
+                }
+            }
+            return true;
         }
     }
 }
