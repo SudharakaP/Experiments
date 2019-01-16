@@ -1,12 +1,8 @@
 package edu.coursera.distributed;
 
-import jdk.internal.util.xml.impl.Input;
-
 import java.io.*;
 import java.net.ServerSocket;
 import java.net.Socket;
-import java.nio.Buffer;
-import java.nio.file.Files;
 
 /**
  * A basic and very limited implementation of a file server that responds to GET
