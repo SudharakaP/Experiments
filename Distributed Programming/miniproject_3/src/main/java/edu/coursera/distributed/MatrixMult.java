@@ -77,7 +77,7 @@ public class MatrixMult {
 
         if (myRank == 0){
             MPI.MPI_Request[] requests = new MPI.MPI_Request[size - 1];
-            for (int i = 0; i < size; i++){
+            for (int i = 1; i < size; i++){
                 final int rankStartRow = i * rowChunk;
                 int rankEndRow = (i + 1) * rowChunk;
                 if (rankEndRow > nrows)
