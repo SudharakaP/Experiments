@@ -1,12 +1,8 @@
 package edu.coursera.distributed;
 
+import java.io.*;
 import java.net.ServerSocket;
 import java.net.Socket;
-
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
-import java.io.File;
 
 /**
  * A basic and very limited implementation of a file server that responds to GET
@@ -35,11 +31,8 @@ public final class FileServer {
          * ServerSocket object.
          */
         while (true) {
-
-            // TODO Delete this once you start working on your solution.
-            throw new UnsupportedOperationException();
-
             // TODO 1) Use socket.accept to get a Socket object
+            Socket s = socket.accept();
 
             /*
              * TODO 2) Now that we have a new Socket object, handle the parsing
@@ -77,6 +70,38 @@ public final class FileServer {
              * If you wish to do so, you are free to re-use code from
              * MiniProject 2 to help with completing this MiniProject.
              */
+            Thread thread = new Thread(
+                    () -> {
+                        try {
+                            InputStream inputStream = s.getInputStream();
+                            InputStreamReader inputStreamReader = new InputStreamReader(inputStream);
+                            BufferedReader bufferedReader = new BufferedReader(inputStreamReader);
+                            String line = bufferedReader.readLine();
+
+                            if (line != null && line.startsWith("GET")) {
+                                String path = line.split(" ")[1];
+                                String filePath = fs.readFile(new PCDPPath(path));
+                                OutputStream outputStream = s.getOutputStream();
+                                PrintWriter printWriter = new PrintWriter(outputStream);
+                                if (filePath != null) {
+                                    printWriter.write("HTTP/1.0 200 OK\r\n");
+                                    printWriter.write("Server: FileServer\r\n");
+                                    printWriter.write("\r\n");
+                                    printWriter.write(fs.readFile(new PCDPPath(path)));
+                                } else {
+                                    printWriter.write("HTTP/1.0 404 Not Found\r\n");
+                                    printWriter.write("Server: FileServer\r\n");
+                                    printWriter.write("\r\n");
+                                }
+                                printWriter.close();
+                                outputStream.close();
+                            }
+                        } catch (Exception e){
+                            e.printStackTrace();
+                        }
+                    }
+            );
+            thread.start();
         }
     }
 }
